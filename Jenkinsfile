@@ -11,7 +11,11 @@ pipeline {
       stage('Unit Test') {
          steps {
           sh "mvn test"
-          
+         }
+         post {
+           always {
+              junit stdioRetention: '', testResults: 'target/jacoco.exec'
+           }
          }
       }
     }
