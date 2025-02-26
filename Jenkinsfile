@@ -21,7 +21,7 @@ pipeline {
       }
       stage('Build Docker Image') {
          steps {
-           withDockerRegistry(credentialsId: 'DOCKER_CRED') {
+           withDockerRegistry(credentialsId: 'DOCKER_CRED', url: 'https://index.docker.io/v1/') {
              sh "docker build -t asoni007/secops:${env.GIT_COMMIT} ."
              sh "docker push asoni007/secops:${env.GIT_COMMIT}"
           }
