@@ -19,5 +19,13 @@ pipeline {
            }
          }
       }
+      stage('Build Docker Image') {
+        steps {
+          withCredentials([usernamePassword(credentialsId: 'DOCKER_CRED')]) {
+            sh 'docker build -t asoni007/secops:${GIT_COMMIT} .'
+            sh 'docker push asoni007/secops:${GIT_COMMIT}'
+          }
+        }
+      }
     }
 }
