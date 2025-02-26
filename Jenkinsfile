@@ -19,12 +19,18 @@ pipeline {
            }
          }
       }
-      stage('Build Docker Image') {
+      stage('Build & Push Docker Image') {
          steps {
            withDockerRegistry(credentialsId: 'DOCKER_CRED', url: 'https://index.docker.io/v1/') {
              sh "docker build -t asoni007/secops:${env.GIT_COMMIT} ."
              sh "docker push asoni007/secops:${env.GIT_COMMIT}"
           }
+        }
+      }
+      stage('k8s-Deployment') {
+        steps {
+          sh "sed -i 's#replace#asoni007/secops:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml"
         }
       }
       }
