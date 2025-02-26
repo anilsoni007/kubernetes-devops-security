@@ -20,12 +20,12 @@ pipeline {
          }
       }
       stage('Build Docker Image') {
-        steps {
-          withDockerRegistry(credentialsId: 'DOCKER_CRED') {
-            sh 'docker build -t asoni007/secops:""$GIT_COMMIT"" .'
-            sh 'docker push asoni007/secops:""$GIT_COMMIT""'
+         steps {
+           withDockerRegistry(credentialsId: 'DOCKER_CRED') {
+             sh "docker build -t asoni007/secops:${env.GIT_COMMIT} ."
+             sh "docker push asoni007/secops:${env.GIT_COMMIT}"
           }
         }
       }
-    }
+      }
 }
