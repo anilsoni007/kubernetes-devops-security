@@ -3,9 +3,22 @@ pipeline {
   kubernetes {
     cloud 'mars-sandbox-k8'
     namespace 'jenkins'
+    yaml '''apiVersion: v1
+            kind: Pod
+            metadata:
+              name: jenkins-agent
+              namespace: jenkins  # Change to your Jenkins namespace
+              labels:
+                app: jenkins-agent
+            spec:
+              serviceAccountName: jenkins-service-account  # Service Account for authentication
+              containers:
+              - name: jnlp
+                image: jenkins/inbound-agent:latest  # Official Jenkins agent image
+                args: ["jnlp"]
+          '''
   }
 }
-
 
   stages {
       // stage('Build Artifact') {
