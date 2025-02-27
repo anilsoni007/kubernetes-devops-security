@@ -1,5 +1,11 @@
 pipeline {
-  agent any
+  agent {
+  kubernetes {
+    cloud 'mars-sandbox-k8'
+    namespace 'jenkins'
+  }
+}
+
 
   stages {
       stage('Build Artifact') {
