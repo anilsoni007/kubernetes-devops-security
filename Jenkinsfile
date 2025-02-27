@@ -31,7 +31,7 @@ pipeline {
            withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
             sh "kubectl version --client"
             sh "sed -i 's#replace#asoni007/secops:${env.GIT_COMMIT}#g' k8s_deployment_service.yaml"
-            sh "cat k8s_deployment_service.yaml" 
+            sh "cat k8s_deployment_service.yaml"
             sh "kubectl apply -f k8s_deployment_service.yaml"
           }
         }
