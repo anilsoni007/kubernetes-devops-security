@@ -3,25 +3,6 @@ pipeline {
     kubernetes {
       cloud 'mars-sandbox-k8'
       namespace 'jenkins'
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  name: jenkins-agent
-  namespace: jenkins
-  labels:
-    app: jenkins-agent
-spec:
-  serviceAccountName: jenkins-service-account
-  containers:
-  - name: jnlp
-    image: jenkins/inbound-agent:latest
-    args: ['jnlp']
-  - name: kubectl
-    image: bitnami/kubectl:latest  # Ensures kubectl is available
-    command: ['sleep', 'infinity']
-"""
-    }
   }
 
   stages {
@@ -52,11 +33,14 @@ spec:
       }
       stage('k8s-Deployment') {
         steps {
-          sh "kubectl version --client"
-          sh "sed -i 's#replace#asoni007/secops:${env.GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "cat k8s_deployment_service.yaml" 
-          sh "kubectl apply -f k8s_deployment_service.yaml --validate=false"
+           withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-secret-config', namespace: 'jenkins', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.36.246:6443') {
+            sh "kubectl version --client"
+            sh "sed -i 's#replace#asoni007/secops:${env.GIT_COMMIT}#g' k8s_deployment_service.yaml"
+            sh "cat k8s_deployment_service.yaml" 
+            sh "kubectl apply -f k8s_deployment_service.yaml --validate=false"
+          }
         }
       }
-      }
+    }
+  }
 }
