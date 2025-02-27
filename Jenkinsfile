@@ -30,6 +30,9 @@ pipeline {
       stage('k8s-Deployment') {
         steps {
           sh "kubectl version --client"
+          sh "sed -i 's#replace#asoni007/secops:${env.GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          sh "cat k8s_deployment_service.yaml" 
+          sh "kubectl apply -f k8s_deployment_service.yaml --validate=false"
         }
       }
       }
