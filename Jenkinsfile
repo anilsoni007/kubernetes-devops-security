@@ -28,7 +28,7 @@ pipeline {
       }
       stage('k8s-Deployment') {
         steps {
-           withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-secret-config', namespace: 'jenkins', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.36.246:6443') {
+           withKubeConfig(credentialsId: 'k8s-secret-config') {
             sh "kubectl version --client"
             sh "sed -i 's#replace#asoni007/secops:${env.GIT_COMMIT}#g' k8s_deployment_service.yaml"
             sh "cat k8s_deployment_service.yaml" 
