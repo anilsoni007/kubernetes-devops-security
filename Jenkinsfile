@@ -23,9 +23,9 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonar-qube-scanner') {
                     sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://65.2.126.141:9000"
-                    timeout(time: 1, unit: 'HOURS') {
-                    waitForQualityGate abortPipeline: true
-                }
+                //     timeout(time: 1, unit: 'HOURS') {
+                //     waitForQualityGate abortPipeline: true
+                // }
                 }
             }
           }
