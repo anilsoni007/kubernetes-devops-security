@@ -18,6 +18,18 @@ pipeline {
            }
          }
       }
+
+      stage('build && SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('sonar-qube-scanner') {
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://65.0.104.178:9000"
+                    timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+                }
+            }
+          }
+
       stage('Build & Push Docker Image') {
          steps {
            withDockerRegistry(credentialsId: 'DOCKER_CRED', url: 'https://index.docker.io/v1/') {
@@ -37,22 +49,6 @@ pipeline {
     //   }
     // }
 
-    stage('build && SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('sonar-qube-scanner') {
-                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://65.0.104.178:9000"
-                }
-            }
-      // stage('k8s-Deployment') {
-      //   steps {
-      //      withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-      //       sh "kubectl version --client"
-      //       sh "sed -i 's#replace#asoni007/secops:${env.GIT_COMMIT}#g' k8s_deployment_service.yaml"
-      //       sh "cat k8s_deployment_service.yaml"
-      //       sh "kubectl apply -f k8s_deployment_service.yaml"
-      //     }
-      //   }
-      // }
-    }
-  }
-}
+    
+        }
+      }
