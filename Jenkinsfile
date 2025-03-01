@@ -30,6 +30,12 @@ pipeline {
             }
           }
 
+      stage('owasp-dependencyCheck') {
+        steps {
+          sh "mvn dependency-check:check"
+        }
+      }
+
       stage('Build & Push Docker Image') {
          steps {
            withDockerRegistry(credentialsId: 'DOCKER_CRED', url: 'https://index.docker.io/v1/') {
