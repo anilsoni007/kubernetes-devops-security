@@ -37,17 +37,27 @@ pipeline {
     //   }
     // }
 
-    stage ('SQ-SAST') {
-      steps {
-        withSonarQubeEnv(credentialsId: 'sq-token') {
-            sh "mvn clean verify sonar:sonar \
-                 -Dsonar.projectKey=secops \
-                 -Dsonar.projectName='secops' \
-                 -Dsonar.host.url=http://65.0.104.178:9000 \
-                 -Dsonar.token=sqp_36a96fe9e3067513e1e58151fc9f0f21b91c14bb"
-         }
-      }
-    }
+    // stage ('SQ-SAST') {
+    //   steps {
+    //     withSonarQubeEnv(credentialsId: 'sq-token') {
+    //         sh "mvn clean verify sonar:sonar \
+    //              -Dsonar.projectKey=secops \
+    //              -Dsonar.projectName='secops' \
+    //              -Dsonar.host.url=http://65.0.104.178:9000 \
+    //              -Dsonar.token=sqp_36a96fe9e3067513e1e58151fc9f0f21b91c14bb"
+    //      }
+    //   }
+    // }
+
+    stage('build && SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('sonar-qube-scanner') {
+                    // Optionally use a Maven environment you've configured already
+                    withMaven(maven:'Maven 3.5') {
+                        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://65.0.104.178:9000"
+                    }
+                }
+            }
       // stage('k8s-Deployment') {
       //   steps {
       //      withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
