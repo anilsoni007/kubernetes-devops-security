@@ -19,16 +19,16 @@ pipeline {
          }
       }
 
-      stage('build & SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('sonar-qube-scanner') {
-                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://43.205.135.155:9000"
-                //     timeout(time: 1, unit: 'HOURS') {
-                //     waitForQualityGate abortPipeline: true
-                // }
-                }
-            }
-          }
+      // stage('build & SonarQube analysis') {
+      //       steps {
+      //           withSonarQubeEnv('sonar-qube-scanner') {
+      //               sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://43.205.135.155:9000"
+      //           //     timeout(time: 1, unit: 'HOURS') {
+      //           //     waitForQualityGate abortPipeline: true
+      //           // }
+      //           }
+      //       }
+      //     }
 
       stage('owasp-dependencyCheck') {
         steps {
