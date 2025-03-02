@@ -19,10 +19,10 @@ pipeline {
          }
       }
 
-      stage('build && SonarQube analysis') {
+      stage('build & SonarQube analysis') {
             steps {
                 withSonarQubeEnv('sonar-qube-scanner') {
-                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://3.111.187.244:9000"
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=secops -Dsonar.projectName='secops' -Dsonar.host.url=http://13.232.121.189:9000"
                 //     timeout(time: 1, unit: 'HOURS') {
                 //     waitForQualityGate abortPipeline: true
                 // }
