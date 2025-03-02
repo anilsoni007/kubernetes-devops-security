@@ -32,7 +32,7 @@ pipeline {
 
       stage('owasp-dependencyCheck') {
         steps {
-          sh "mvn dependency-check:check"
+          sh "sudo mvn dependency-check:check"
         }
       }
 
